@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"strconv"
+	"strings"
 )
 
 func main() {
@@ -36,6 +37,8 @@ func main() {
 			fmt.Printf("Unable to book your %v tickets please try with some number <= %v\n", userTickets, tmptickets)
 		}
 	}
-	fmt.Printf("All Booking in this session %v\n", bookings)
+	for _, booking := range bookings {
+		fmt.Printf("All Booking in this session %v\n", strings.Fields(booking)[1])
+	}
 
 }
