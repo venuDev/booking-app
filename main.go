@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 )
 
@@ -10,35 +9,43 @@ func main() {
 	var conferenceName string = "Go Conference"
 	const conferenceTickets uint = 50
 	var remainingTickets uint = 50
-	var firstName, lastName, emailAddress string
-	var userTickets uint
-	bookings := []string{}
+	type UserData struct {
+		firstName       string
+		lastName        string
+		email           string
+		numberOfTickets uint
+	}
 
+	var bookings = make([]UserData, 0)
+	var tuser UserData
 	fmt.Printf("Welcome to %s booking App\n", conferenceName)
-	fmt.Printf("We have %d avilable out off %d\n", remainingTickets, conferenceTickets)
 	for {
 		fmt.Printf("Please enter First Name : \n")
-		fmt.Scan(&firstName)
-		if firstName == "quit" {
+		fmt.Scan(&tuser.firstName)
+		fmt.Printf("Please enter Last Name : \n")
+		fmt.Scan(&tuser.lastName)
+		fmt.Printf("Please enter Email Address : \n")
+		fmt.Scan(&tuser.email)
+		fmt.Printf("Please enter No.Of.Tickets You need : \n")
+		fmt.Scan(&tuser.numberOfTickets)
+		tmptickets := remainingTickets - tuser.numberOfTickets
+		if remainingTickets > tuser.numberOfTickets && tmptickets >= 1 {
+			remainingTickets = tmptickets
+			bookings = append(bookings, tuser)
+			fmt.Printf("Hello %v Sucessfully  booked %v tickets.!! Happy Holidays \n", tuser.firstName, tuser.numberOfTickets)
+		} else {
+			fmt.Printf("Unable to book your %v tickets please try with some number <= %v\n", tuser.numberOfTickets, tmptickets)
+		}
+		var quit string
+		fmt.Println("Do you want continue Any key/No(N)")
+		fmt.Scan(&quit)
+		if (strings.EqualFold(quit, "N") ||strings.EqualFold(quit, "NO")) {
 			break
 		}
-		fmt.Printf("Please enter Last Name : \n")
-		fmt.Scan(&lastName)
-		fmt.Printf("Please enter Email Address : \n")
-		fmt.Scan(&emailAddress)
-		fmt.Printf("Please enter No.Of.Tickets You need : \n")
-		fmt.Scan(&userTickets)
-		tmptickets := remainingTickets - userTickets
-		if remainingTickets > userTickets && tmptickets >= 1 {
-			remainingTickets = remainingTickets - userTickets
-			bookings = append(bookings, firstName+""+lastName+" - "+strconv.FormatUint(uint64(userTickets), 10))
-			fmt.Printf("Hello %v Sucessfully  booked %v tickets.!! Happy Holidays \n", firstName, userTickets)
-		} else {
-			fmt.Printf("Unable to book your %v tickets please try with some number <= %v\n", userTickets, tmptickets)
-		}
 	}
+	fmt.Printf("All Booking in this session\n Name      Tickets \n")
 	for _, booking := range bookings {
-		fmt.Printf("All Booking in this session %v\n", strings.Fields(booking)[1])
+		fmt.Printf("%v - %v \n", booking.email, booking.numberOfTickets)
 	}
 
 }
